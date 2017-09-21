@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Psychic Game</title>
+</head>
+<body>
+
+	<h1>The Psychic Game</h1>
+	
+	<h3>Try to guess the letter I have secretly chosen!</h3>
+	
+	<div id="game">
+		<ul> 
+			<li> <p id="wins">Wins: </p></li>
+			<li> <p id="losses">Losses: </p></li>
+			<li> <p id="guessLeft">Guesses Left: </p></li>
+			<li> <p id="let">Your Guesses so far: </p></li>
+		</ul>  
+		
+	</div>
+
+
+	<script type="text/javascript">
+//Letters to chose from
+var computerChoices = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+
+//Setting everything to zero
+var wins = 0;
+var losses = 0;
+var guesses = 9;
+var guessesLeft = 9;
+var guessedLetters = [];
+var letterToGuess = null;
+
+
+
+//Select a random letter from the available choices
+var computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)];
+
+//You get 9 guesses and it appears in the html
+var updateGuessesLeft = function() {
+	//found this querySelector online - very useful! sorry if i jumped a gun
+	document.querySelector('#guessLeft').innerHTML = "Guesses left: " + guessesLeft;
+};
+
+var updateLetterToGuess = function() {
+	this.letterToGuess = this.computerChoices[Math.floor(Math.random() * this.computerChoices.length)];
+};
+
+//add commas between players guesses
+var updateGuessesSoFar = function() {
+	document.querySelector('#let').innerHTML = "Your Guesses so far: " + guessedLetters.join(', ');
+};
+
+//Function will be called when we reset everything
+var reset = function() {
+	totalGuesses = 9;
+	guessesLeft = 9;
+	guessedLetters = [];
+
+	updateLetterToGuess();
+	updateGuessesLeft();
+	updateGuessesSoFar();
+}
+
+updateLetterToGuess();
+updateGuessesLeft();
+
+
+//When key is pressed it becomes a guess
+document.onkeyup = function(event) {
+	guessesLeft--;
+  //Change to lowercase
+  var userGuess = String.fromCharCode(event.keyCode).toLowerCase();
+
+  guessedLetters.push(userGuess);
+  updateGuessesLeft();
+  updateGuessesSoFar();
+
+//If the player wins, tell them they are psychic!
+if (guessesLeft > 0){
+	if (userGuess == letterToGuess){
+		wins++;
+		document.querySelector('#wins').innerHTML = "Wins: " + wins;
+		alert("Nice, you are psychic!");
+		reset();
+	}
+}else if(guessesLeft == 0){
+//If the player losses, tell them they are lame
+losses++;
+document.querySelector('#losses').innerHTML = "Losses: " + losses;
+alert("Lame, you're not psychic :(");
+ // Then we reset
+ reset();
+}
+};
+
+
+</script>
+</body>
+</html>
